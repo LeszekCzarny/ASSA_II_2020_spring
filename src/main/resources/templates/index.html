@@ -2,68 +2,122 @@
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-
-    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
-
     <title>Name Service</title>
+
+    <style>
+
+        .layout {
+            border: 3px solid black;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            margin-right: auto;
+            margin-left: auto;
+            background-color: white;
+            width: 800px;
+        }
+
+        .record {
+            border: 1px solid black;
+            background-color: lightblue;
+            padding: 10px;
+        }
+
+        .record > span {
+            border: 1px solid black;
+            padding: 5px;
+            font-size: 30px;
+            background-color: lightblue;
+        }
+
+        .user_list {
+            border: 3px solid black;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            margin-right: auto;
+            margin-left: auto;
+            background-color: white;
+            width: 600px;
+        }
+
+    </style>
 
 </head>
 <body>
 
     <div class="layout">
 
-        <a href="#" th:href="@{/welcome}">Welcome</a>
+        <div th:if="${isLogin == false}">
+            <form th:action="@{/login}" method="post" th:object="${loginForm}">
+                <input type="text" id="name" name="name" placeholder="Your name" th:field="*{name}">
+                <input type="password" id="password" name="password" placeholder="Password" th:field="*{password}">
+                <input type="submit" value="ok">
+            </form>
+
+            <a href="#" th:href="@{/register}">Rejestracja</a>
 
 
-<!--        <div th:if="${isLogin == false}">-->
-<!--            <form th:action="@{/login}" method="post" th:object="${loginForm}">-->
-<!--                <input type="text" id="name" name="name" placeholder="Your name" th:field="*{name}">-->
-<!--                <input type="password" id="password" name="password" placeholder="Password" th:field="*{password}">-->
-<!--                <input type="submit" value="ok">-->
-<!--            </form>-->
+            <p th:if="${isRegister} != null">
+                <span th:text="${isRegister}"></span>
+            </p>
+        </div>
 
-<!--            <a href="#" th:href="@{/register}">Rejestracja</a>-->
-
-<!--            <p th:if="${isRegister} != null">-->
-<!--                <span th:text="${isRegister}"></span>-->
-<!--            </p>-->
-<!--        </div>-->
-
-<!--        <div th:if="${loginMessage != null}">-->
-<!--            <p th:text="${loginMessage}"></p>-->
-<!--        </div>-->
+        <div th:if="${loginMessage != null}">
+            <p th:text="${loginMessage}"></p>
+        </div>
 
 
-<!--        <div th:if="${isLogin}">-->
-<!--            <p>-->
-<!--                <span>Jesteś zalogowany: </span>-->
-<!--                <span th:text="${userName}"></span>-->
-<!--            </p>-->
+        <div th:if="${isLogin}">
+            <p>
+                <span>Jesteś zalogowany: </span>
+                <span th:text="${userName}"></span>
+            </p>
 
-<!--            <a th:href="@{/change_password/}">Change Password</a>-->
+            <a th:href="@{/change_password/}">Change Password</a>
 
-<!--            <p>-->
-<!--                <span>Wyloguj się: </span>-->
-<!--                <span>-->
-<!--                <a href="#" th:href="@{/logout}">wyloguj</a>-->
-<!--            </span>-->
-<!--            </p>-->
+            <p>
+                <span>Wyloguj się: </span>
+                <span>
+                <a href="#" th:href="@{/logout}">wyloguj</a>
+            </span>
+            </p>
 
-<!--            <p th:if="${nameSize} != null">-->
-<!--                <span>Ilość liter w imieniu: </span>-->
-<!--                <span th:text="${nameSize}"></span>-->
-<!--            </p>-->
+            <p th:if="${nameSize} != null">
+                <span>Ilość liter w imieniu: </span>
+                <span th:text="${nameSize}"></span>
+            </p>
 
-<!--            <div th:if="${isEvenLettersInName} != null">-->
-<!--                <span>Czy liczba liter w imieniu jest parzysta?: </span>-->
-<!--                <span th:text="${isEvenLettersInName}"></span>-->
-<!--            </div>-->
+            <div th:if="${isEvenLettersInName} != null">
+                <span>Czy liczba liter w imieniu jest parzysta?: </span>
+                <span th:text="${isEvenLettersInName}"></span>
+            </div>
 
-<!--        </div>-->
+        </div>
 
-<!--        <div th:if="${isLogout}">-->
-<!--            <span>Jesteś wylogowany!</span>-->
-<!--        </div>-->
+        <div th:if="${isLogout}">
+            <span>Jesteś wylogowany!</span>
+        </div>
+
+
+
+        <div class="user_list" th:each="user : ${users}">
+            <p class="record">
+                <span th:text="${user.getId()}">1</span>
+
+                <span th:text="${user.getLogin()}">User</span>
+
+                <span th:text="${user.getPassword()}">1234</span>
+
+                <span>
+                <a th:href="@{/delete/{id} (id=${user.getId()})}">Delete</a>
+            </span>
+                <span>
+                <a th:href="@{/delete/} + ${user.getId()}">Delete</a>
+            </span>
+                <span>
+                <a th:href="'/delete/' + ${user.getId()}">Delete</a>
+            </span>
+            </p>
+        </div>
 
     </div>
 
